@@ -1,0 +1,30 @@
+FROM ubuntu:18.04 as idea
+
+ARG IDEA_VERSION=ideaIC-2019.3.4
+ARG IDEA_TAR=${IDEA_VERSION}.tar.gz
+ARG IDEA_BASE_URL=https://download-cf.jetbrains.com/idea/
+
+WORKDIR /opt
+
+RUN apt-get update && \
+    apt-get install -y wget && \
+    apt-get clean && \
+    wget ${IDEA_BASE_URL}${IDEA_TAR} && \
+    tar xzf ${IDEA_TAR} && \
+    tar tzf ${IDEA_TAR} | head -1 | sed -e 's/\/.*//' | xargs -I{} ln -s {} idea && \
+    rm ${IDEA_TAR}
+
+WORKDIR /
+
+ENV PATH="/opt/idea/bin:${PATH}"
+
+
+FROM idea as idea-openjdk
+
+ARG JDK_VERSION=11
+ARG JDK_PACKAGE=openjdk-${JDK_VERSION}-jdk
+
+RUN apt-get update && \
+    apt-get install -y ${JDK_PACKAGE} ca-certificates-java && \
+    apt-get clean && \
+    update-ca-certificates -f
