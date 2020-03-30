@@ -1,0 +1,33 @@
+# This workflow will build a package using Maven and then publish it to GitHub packages when a release is created
+# For more information see: https://github.com/actions/setup-java#apache-maven-with-a-settings-path
+
+name: Maven Package
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: lint
+      run: |
+        docker build -f Dockerfile-idea -t idea .
+        docker run --rm -v $(pwd):/prj idea sh -c 'idea.sh inspect /prj /prj/.idea/inspectionProfiles/Project_Inspections.xml /prj/target/idea_inspections -v2 -d /prj/src'
+
+    - name: build
+      run: mvn -B -DskipTests clean package
+    
+    - name: test
+      run: mvn -B test
+      
+    - name: deploy
+      run: |
+        docker build -t awesome-image:latest .
+        echo ./deploy.sh
+      
