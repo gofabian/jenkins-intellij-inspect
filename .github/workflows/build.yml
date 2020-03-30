@@ -20,7 +20,7 @@ jobs:
     - name: lint
       run: |
         docker build -f Dockerfile-idea -t idea .
-        docker run --rm -v $(pwd):/prj idea sh -c 'idea.sh inspect /prj /prj/.idea/inspectionProfiles/Project_Inspections.xml /prj/idea_inspections -v2 -d /prj/src'
+        docker run --rm -v $(pwd):/prj idea sh -c 'idea.sh inspect /prj /prj/.idea/inspectionProfiles/Project_Inspections.xml /prj/idea_inspections -format plain -v2 -d /prj/src'
 
     - uses: actions/setup-java@v1
       with:
