@@ -9,7 +9,7 @@ WORKDIR /opt
 RUN apt-get update && \
     apt-get install -y wget && \
     apt-get clean && \
-    wget ${IDEA_BASE_URL}${IDEA_TAR} && \
+    wget -nv ${IDEA_BASE_URL}${IDEA_TAR} && \
     tar xzf ${IDEA_TAR} && \
     tar tzf ${IDEA_TAR} | head -1 | sed -e 's/\/.*//' | xargs -I{} ln -s {} idea && \
     rm ${IDEA_TAR}
