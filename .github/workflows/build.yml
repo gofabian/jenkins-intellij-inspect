@@ -23,7 +23,7 @@ jobs:
         docker run --rm -v $(pwd):/prj idea sh -c 'idea.sh inspect /prj /prj/.idea/inspectionProfiles/Project_Inspections.xml /prj/target/idea_inspections -v2 -d /prj/src'
 
     - name: build
-      run: mvn -B -DskipTests clean package
+      run: mvn -B -DskipTests package
     
     - name: test
       run: mvn -B test
